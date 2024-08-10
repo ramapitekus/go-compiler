@@ -36,6 +36,16 @@ func DisassembleInstruction(c *chunk.Chunk, offset int) int {
 		return simpleInstruction("OP_RETURN", offset);
 	case chunk.OP_CONSTANT:
 		return constantInstruction("OP_CONSTANT", offset, c);
+	case chunk.OP_NEGATE:
+		return simpleInstruction("OP_NEGATE", offset)
+	case chunk.OP_ADD:
+		return simpleInstruction("OP_ADD", offset)
+	case chunk.OP_SUBTRACT:
+		return simpleInstruction("OP_SUBTRACT", offset)
+	case chunk.OP_MULTIPLY:
+		return simpleInstruction("OP_MULTIPLY", offset)
+	case chunk.OP_DIVIDE:
+		return simpleInstruction("OP_DIVIDE", offset)
 	default:
 		fmt.Printf("Unknown opcode %d\n", instruction);
 		return offset + 1;

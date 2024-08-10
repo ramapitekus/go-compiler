@@ -6,6 +6,11 @@ type Value float32
 const (
 	OP_RETURN OpCode = iota
 	OP_CONSTANT
+	OP_NEGATE
+	OP_ADD
+	OP_SUBTRACT
+	OP_MULTIPLY
+	OP_DIVIDE
 )
 
 type LinesEncoded struct {
