@@ -14,8 +14,22 @@ func DisassembleChunk(chunk *chunk.Chunk, name string) {
 	}
 }
 
+func DecodeLine(c *chunk.Chunk, offset int) {
+	currentPosition := 0
+	for index, line := range(c.Lines) {
+		currentPosition += line.Occurences
+		if currentPosition >= offset {
+			fmt.Printf("%4d ", c.Lines[index].Line)
+			break
+		}
+	}
+}
+
 func DisassembleInstruction(c *chunk.Chunk, offset int) int {
 	fmt.Printf("%04d ", offset);
+
+	DecodeLine(c, offset)
+
 	instruction := c.Code[offset];
 	switch instruction {
 	case chunk.OP_RETURN:
@@ -36,11 +50,11 @@ func simpleInstruction(name string, offset int) int {
 func constantInstruction(name string, offset int, c *chunk.Chunk) int {
 	index := c.Code[offset + 1] // +1 because it's 2 bytes
 	fmt.Printf("%-16s %4d '", name, index);
-	printValue(c.Constants[index]);
+	PrintValue(c.Constants[index]);
 	fmt.Printf("'\n");
 	return offset + 2;
 }
 
-func printValue(value chunk.Value) {
+func PrintValue(value chunk.Value) {
 	fmt.Printf("%g", value);
 }

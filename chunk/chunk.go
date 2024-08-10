@@ -8,13 +8,34 @@ const (
 	OP_CONSTANT
 )
 
+type LinesEncoded struct {
+	Occurences int
+	Line       int
+}
+
 type Chunk struct {
 	Code      []OpCode
+	Lines     []LinesEncoded
 	Constants []Value
 }
 
-func (chunk *Chunk) WriteChunk(ch OpCode) {
+func (chunk *Chunk) WriteChunk(ch OpCode, line int) {
 	chunk.Code = append(chunk.Code, ch)
+	chunk.addLineInfo(line)
+}
+
+func (chunk *Chunk) addLineInfo(line int) {
+	if len(chunk.Lines) == 0 {
+		chunk.Lines = append(chunk.Lines, LinesEncoded{Occurences: 1, Line: line})
+		return
+	}
+
+	prevLineIndex := len(chunk.Lines) - 1
+	if chunk.Lines[prevLineIndex].Line == line {
+		chunk.Lines[prevLineIndex].Occurences += 1
+	} else {
+		chunk.Lines = append(chunk.Lines, LinesEncoded{Occurences: 1, Line: line})
+	}
 }
 
 func (chunk *Chunk) AddConstant(constant Value) OpCode {
@@ -23,5 +44,5 @@ func (chunk *Chunk) AddConstant(constant Value) OpCode {
 }
 
 func InitChunk() *Chunk {
-	return &Chunk{Code: []OpCode{}}
+	return &Chunk{}
 }
