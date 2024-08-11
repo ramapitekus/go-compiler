@@ -3,7 +3,9 @@ package vm
 import (
 	"fmt"
 	"interpreter/chunk"
+	"interpreter/compiler"
 	"interpreter/debug"
+	"os"
 )
 
 type InterpretResult uint8
@@ -32,7 +34,31 @@ type VM struct {
 	chunk *chunk.Chunk
 	Stack *Stack
 }
-func (vm *VM) Interpret(c *chunk.Chunk) InterpretResult {
+
+func (vm *VM) repl(){
+}
+
+func (vm *VM) runFile(path string){
+	source := readFile(path)
+	result := vm.Interpret(source)
+	if (result == INTERPRET_COMPILE_ERROR){
+		os.Exit(65)
+	}
+	if (result == INTERPRET_RUNTIME_ERROR) {
+		os.Exit(70)
+	}
+}
+
+func readFile(path string) string {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		panic(err)
+	}
+	return string(data[:])
+}
+
+func (vm *VM) Interpret(source string) InterpretResult {
+	compiler.Compile(source)
 	vm.chunk = c
 	return vm.run()
 }
