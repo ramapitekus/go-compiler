@@ -37,10 +37,21 @@ func (vm *VM) Interpret(c *chunk.Chunk) InterpretResult {
 	return vm.run()
 }
 
+func (vm *VM)printStack(){
+	fmt.Printf(" ")
+	for _, value := range(vm.Stack.Stack[:vm.Stack.StackTopIndex]) {
+		fmt.Printf("[ ")
+		debug.PrintValue(value)
+		fmt.Printf(" ]")
+	}
+	fmt.Printf("\n")
+}
+
 func (vm *VM) run() InterpretResult {
 	instructions := vm.chunk.Code
 	for instructionIndex := 0; instructionIndex < len(instructions); instructionIndex++ {
 		opcode := instructions[instructionIndex]
+		vm.printStack()  // print the current stack after each instruction
 		switch opcode {
 		case chunk.OP_CONSTANT:
 			instructionIndex++

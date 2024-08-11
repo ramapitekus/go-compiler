@@ -26,5 +26,5 @@ func main() {
 	c.WriteChunk(chunk.OP_NEGATE, 123)
 	c.WriteChunk(chunk.OP_RETURN, 123)
 	vm.Interpret(c)
-	debug.DisassembleChunk(c, "chunk");
+	debug.DisassembleChunk(c, "debug log");
 }
